@@ -1,5 +1,5 @@
 {
-    "name": "orangedigital/business-selector-extension",
+    "name": "alnutile/business-selector-extension",
     "type": "library",
     "description": "CSS Selector Substitution For Behat",
     "keywords": ["Behat","BDD", "Gherkin"],
