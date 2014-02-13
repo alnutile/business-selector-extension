@@ -134,7 +134,10 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      * @Then /^I should see "([^"]*)" on the page$/
      */
     public function iShouldSeeOnThePage($arg1) {
-        $element = $this->findTextWithBusinessSelector($arg1);
+        $result = $this->findTextWithBusinessSelector($arg1);
+        if (!$result) {
+            throw new \RuntimeException("'$arg1' not found on the page");
+        }
     }
 
     /**
