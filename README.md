@@ -1,8 +1,19 @@
 # Business Selectors For Behat
 
-Build Status: [![Build Status](https://secure.travis-ci.org/orangedigital/business-selector-extension.png)](http://travis-ci.org/orangedigital/business-selector-extension)
+[![Build Status](https://travis-ci.org/alnutile/business-selector-extension.png?branch=develop)](https://travis-ci.org/alnutile/business-selector-extension)
 
 ## Introduction 
+
+--
+
+The original project can be seen here
+https://github.com/orangedigital/business-selector-extension
+
+And many notes still apply below. I needed to simplify it a bit for the project I am using it on though it still is extendable to to other projects.
+
+Basically I do not want errors thrown if a token is not found since it can default back to the string the user used and then let Behat error out as needed
+
+--
 
 The Mink Extension for Behat is an excellent way to quickly get up and running 
 with web acceptance testing. It allows the user to specify HTML elements on the
