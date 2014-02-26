@@ -50,6 +50,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
         $this->parameters = $parameters;
     }
 
+
     /**
      * @Given /^I go to the page "([^"]*)"$/
      */
@@ -69,6 +70,103 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
         $element = $this->findElementWithBusinessSelector($elementName);
         $element->click();
     }
+
+    /**
+     * @todo decide how to move this into subcontext
+     *
+     * @Given /^I fill in "([^"]*)" field with token "([^"]*)"$/
+     */
+    public function iFillInFieldWithToken($elementName, $value) {
+        $element = $this->getSelectorFromString($elementName);
+        $token_value = $this->getSelectorFromString($value);
+        $this->getSession()->getPage()->fillField($element, $token_value);
+    }
+
+    /**
+     * @hidden we have the url match now
+     *
+     * @Then /^the url should redirect to "([^"]*)" token$/
+     */
+    public function theUrlShouldRedirectToToken($arg1)
+    {
+        $page = $this->getSelectorFromString($arg1);
+        if($this->getSession()->getCurrentUrl() != $page) {
+            throw new Exception('You are not on the expected URL');
+        }
+    }
+
+    /**
+     * @hidden
+     *
+     * @Given /^I switch to popup by pressing the xpath "([^"]*)" token$/
+     */
+    public function iSwitchToPopupByPressingTheXpathToken($arg1)
+    {
+        $arg1 = $this->getSelectorFromString($arg1);
+        $this->GetOriginalWindowName();
+        $originalWindowName = $this->originalWindowName;
+
+        if($this->getSession()->getPage()->find('xpath', $arg1)) {
+            $button = $this->getSession()->getPage()->find('xpath', $arg1);
+            $button->press();
+        } else {
+            throw new Exception('Element not found');
+        }
+
+        $popupName = $this->getNewPopup($originalWindowName);
+
+        //Switch to the popup Window
+        $this->getSession()->switchToWindow($popupName);
+    }
+
+    /**
+     * @hidden
+     *
+     * @Given /^I press the xpath "([^"]*)" token$/
+     */
+    public function iPressTheXpathToken($arg1) {
+        $arg1 = $this->getSelectorFromString($arg1);
+        if($this->getSession()->getPage()->find('xpath', $arg1)) {
+            $button = $this->getSession()->getPage()->find('xpath', $arg1);
+            $button->press();
+        } else {
+            throw new Exception('Element not found');
+        }
+    }
+
+
+    /**
+     * @hidden
+     *
+     * This gets the window name of the new popup.
+     */
+    private function getNewPopup($originalWindowName = NULL) {
+        //Get all of the window names first
+        $names = $this->getSession()->getWindowNames();
+
+        //Now it should be the last window name
+        $last = array_pop($names);
+
+        if (!empty($originalWindowName)) {
+            while ($last == $originalWindowName && !empty($names)) {
+                $last = array_pop($names);
+            }
+        }
+
+        return $last;
+    }
+
+    /**
+     * @hidden
+     */
+    protected function GetOriginalWindowName()
+    {
+        $originalWindowName = $this->getSession()->getWindowName(); //Get the original name
+        if (empty($this->originalWindowName)) {
+            $this->originalWindowName = $originalWindowName;
+        }
+    }
+    
 
     /**
      * @When /^I fill in the "([^"]*)" field with "([^"]*)"$/
@@ -342,15 +440,21 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
 
     /**
      * Checks in the selector yaml file for a selector which matches the 
-     * supplied business friendly string. 
+     * supplied business friendly string.
+     *
+     * @param $string this is the string to check
+     * @param $exception allow the user to turn off the Expection and just return the original
+     *   string
      *
      * @return string
      */
-    public function getSelectorFromString($string) {
+    public function getSelectorFromString($string, $exception = true) {
         $selectors = $this->getSelectorHash();
 
-        if (!array_key_exists($string, $selectors)) {
+        if (!array_key_exists($string, $selectors) && $exception == true) {
             throw new \RuntimeException('Selector: ' . $string . ' not found in selectors file');
+        } elseif(!array_key_exists($string, $selectors)) {
+            return $string;
         }
 
         return $selectors[$string];
@@ -386,7 +490,6 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
             if (!$path) {
                 throw new \RuntimeException('Value "selectorFilePath not set in config"');
             }
-
             $this->selectors = $this->loadYaml($path);
         }
 
