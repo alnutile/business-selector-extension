@@ -159,7 +159,6 @@ class UIBusinessSelectorContextTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('Test Token', $string, "Test Token was not found but it was not returned as expected");
     }
 
-
     /**
      * @expectedException RuntimeException
      */
@@ -167,6 +166,15 @@ class UIBusinessSelectorContextTest extends \PHPUnit_Framework_TestCase {
     {
         $string = 'Test Token';
         $string = $this->context->getSelectorFromString($string, true);
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testSelectorFromStringNotFoundWithThrowUsingDefault()
+    {
+        $string = 'Test Token';
+        $string = $this->context->getSelectorFromString($string);
     }
 
     public function testIFollowTheLinkShouldThrowExceptionOnNonExistentSelector() {
