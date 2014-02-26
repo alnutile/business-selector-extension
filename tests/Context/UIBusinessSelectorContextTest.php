@@ -152,6 +152,31 @@ class UIBusinessSelectorContextTest extends \PHPUnit_Framework_TestCase {
         $this->context->iFollowTheLink('User Link');
     }
 
+    public function testSelectorFromStringNotFound()
+    {
+        $string = 'Test Token';
+        $string = $this->context->getSelectorFromString($string, false);
+        $this->assertEquals('Test Token', $string, "Test Token was not found but it was not returned as expected");
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testSelectorFromStringNotFoundWithThrow()
+    {
+        $string = 'Test Token';
+        $string = $this->context->getSelectorFromString($string, true);
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testSelectorFromStringNotFoundWithThrowUsingDefault()
+    {
+        $string = 'Test Token';
+        $string = $this->context->getSelectorFromString($string);
+    }
+
     public function testIFollowTheLinkShouldThrowExceptionOnNonExistentSelector() {
 
         $this->setSessionExpectation(false);
