@@ -22,3 +22,6 @@ Add: "#add"
 Remove: "#remove"
 Hide: "#hide"
 Unhide: "#unhide"
+
+#Text Selectors
+testerson: "Foo"
