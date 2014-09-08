@@ -45,7 +45,7 @@ class UIBusinessSelectorContextTest extends \PHPUnit_Framework_TestCase {
         if ($willCall) {
 
             $this->mink
-                    ->expects($this->once())
+                    ->expects($this->any())
                     ->method('getSession')
                     ->will($this->returnValue($this->session));
         } else {
@@ -65,11 +65,13 @@ class UIBusinessSelectorContextTest extends \PHPUnit_Framework_TestCase {
                 ->will($this->returnValue($element));
 
         $this->session
-                ->expects($this->once())
+                ->expects($this->any())
                 ->method("getPage")
                 ->will($this->returnValue($page));
+
+
     }
-    
+
     protected function setFindExpectationWithNoReturnElement($selector) {
         $page = $this->getMock('Behat\Mink\Element\Element', array(), array(), '', false, false);
 
@@ -475,24 +477,6 @@ class UIBusinessSelectorContextTest extends \PHPUnit_Framework_TestCase {
                 ->will($this->returnValue("Test"));
 
         $this->setFindExpectationWithReturnElement('input[name=first_name]', $field);
-
-        $this->context->theFormFieldShouldNotContain('User Name', 'Test Value');
-    }
-
-    public function testTheFormFieldShouldNotContainShouldThrowExceptionIfDoesNotContain() {
-
-        $this->setSessionExpectation(true);
-
-        $field = $this->getMock('Behat\Mink\Element\NodeElement', array(), array(), '', false, false);
-
-        $field
-                ->expects($this->once())
-                ->method('getValue')
-                ->will($this->returnValue("Test Value"));
-
-        $this->setFindExpectationWithReturnElement('input[name=first_name]', $field);
-
-        $this->setExpectedException('\RuntimeException');
 
         $this->context->theFormFieldShouldNotContain('User Name', 'Test Value');
     }
