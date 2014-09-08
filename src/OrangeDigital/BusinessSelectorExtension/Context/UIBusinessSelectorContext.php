@@ -242,9 +242,19 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      * @Then /^the "([^"]*)" form field should not contain "([^"]*)"$/
      */
     public function theFormFieldShouldNotContain($elementName, $value) {
+        /**
+         * $elementName     = passwordField
+         * $value           = emailValue
+         *
+         * passwordField    ->.capture_traditionalSignIn_password
+         * emailValue       -> pfz.behat+1@gmail.com <-- this is not working
+         *
+         */
         $element = $this->findElementWithBusinessSelector($elementName);
 
-        $text = $element->getValue();
+        $value   = $this->findTextWithBusinessSelector($value);
+
+        $text    = $element->getValue();
 
         if ($text == $value) {
             throw new \RuntimeException("'$value' does not match expected '$text'");
