@@ -23,6 +23,11 @@
         "symfony/config": ">=2.0.0,<2.3.0",
         "symfony/dependency-injection": ">=2.0.0,<2.3.0"
     },
+    "require-dev": {
+        "behat/mink-goutte-driver": "1.0.8",
+        "behat/mink-selenium-driver": "1.0.5",
+        "behat/mink-selenium2-driver": "1.0.6"
+    },
     "autoload": {
         "psr-0": {
             "OrangeDigital\\BusinessSelectorExtension": "src"
