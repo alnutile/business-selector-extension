@@ -7,3 +7,4 @@ Terms Box: "input[name=terms]"
 Container: "div.main"
 SubContainer: "div.sub"
 Frame: frameid
+Test Value: foo
