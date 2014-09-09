@@ -57,13 +57,13 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
     public function iGoToThePage($pageName) {
         $page = $this->getUrlFromString($pageName);
         $url = $this->getUrl($page);
-
         $this->getSession()->visit($url);
     }
 
     /**
      * @When /^I follow the link "([^"]*)"$/
      * @When /^I press the "([^"]*)" button$/
+     * @When /^I press button the "([^"]*)"$/
      * @Given /^I click the "([^"]*)"$/
      */
     public function iFollowTheLink($elementName) {
@@ -563,6 +563,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      */
     protected function getUrl($frag = null) {
         $url = $this->minkParameters['base_url'];
+
 
         if (!is_null($frag) && $frag != '/') {
             $url = $url . $frag;
