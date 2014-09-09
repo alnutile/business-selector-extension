@@ -224,6 +224,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
         $value = $this->getSelectorFromString($value);
         $text = $element->getValue();
 
+
         if ($text != $value) {
             throw new \RuntimeException("'$value' does not match expected '$text'");
         }
@@ -245,8 +246,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
     public function theFormFieldShouldNotContain($elementName, $value) {
         $element = $this->findElementWithBusinessSelector($elementName);
 
-        $value   = $this->findTextWithBusinessSelector($value);
-
+        $value   = $this->getSelectorFromString($value);
         $text    = $element->getValue();
 
         if ($text == $value) {
