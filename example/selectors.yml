@@ -24,4 +24,5 @@ Hide: "#hide"
 Unhide: "#unhide"
 
 #Text Selectors
-testerson: "Foo"
+test foo: "Foo"
+ben foo: "ben"

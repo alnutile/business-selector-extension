@@ -2,8 +2,7 @@ default:
     context:
         parameters:
             javascript_session: selenium
-            browser: firefox
-            show_cmd: open %s
+            browser: safari
     extensions:
         OrangeDigital\BusinessSelectorExtension\Extension:
           urlFilePath: urls.yml

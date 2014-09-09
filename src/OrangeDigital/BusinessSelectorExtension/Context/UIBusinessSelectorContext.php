@@ -220,8 +220,8 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      */
     public function theFormFieldShouldContain($elementName, $value) {
         $element = $this->findElementWithBusinessSelector($elementName);
-        $value   = $this->findTextWithBusinessSelector($value);
 
+        $value = $this->getSelectorFromString($value);
         $text = $element->getValue();
 
         if ($text != $value) {
