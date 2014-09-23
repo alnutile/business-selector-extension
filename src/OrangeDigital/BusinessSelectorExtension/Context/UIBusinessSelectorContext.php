@@ -197,10 +197,17 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      * @When /^I check the "([^"]*)" checkbox$/
      */
     public function iCheckTheCheckbox($elementName) {
-        $element = $this->findElementWithBusinessSelector($elementName);
+        $option = $this->getSelectorFromString($elementName);
+        $this->getSession()->getPage()->checkField($option);
+    }
 
-        if (!$element->isChecked()) {
-            $element->check();
+    /**
+     * @Then /^the "([^"]*)" should be checked$/
+     */
+    public function theShouldBeChecked($elementName) {
+        $element = $this->getSelectorFromString($elementName);
+        if (!$this->getSession()->getPage()->hasCheckedField($element)) {
+            throw new \RuntimeException("$elementName is not checked");
         }
     }
 
@@ -208,11 +215,8 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      * @When /^I uncheck the "([^"]*)" checkbox$/
      */
     public function iUnCheckTheCheckbox($elementName) {
-        $element = $this->findElementWithBusinessSelector($elementName);
-
-        if ($element->isChecked()) {
-            $element->uncheck();
-        }
+        $option = $this->getSelectorFromString($elementName);
+        $this->getSession()->getPage()->uncheckField($option);
     }
 
     /**
@@ -255,24 +259,12 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
     }
 
     /**
-     * @Then /^the "([^"]*)" should be checked$/
-     */
-    public function theShouldBeChecked($elementName) {
-        $element = $this->findElementWithBusinessSelector($elementName);
-
-        if (!$element->isChecked()) {
-            throw new \RuntimeException("$elementName is not checked");
-        }
-    }
-
-    /**
      * @Then /^the "([^"]*)" should not be checked$/
      */
     public function theShouldNotBeChecked($elementName) {
-        $element = $this->findElementWithBusinessSelector($elementName);
-
-        if ($element->isChecked()) {
-            throw new \RuntimeException("$elementName is checked");
+        $element = $this->getSelectorFromString($elementName);
+        if ($this->getSession()->getPage()->hasCheckedField($element)) {
+            throw new \RuntimeException("$elementName is checked and should not be");
         }
     }
 
@@ -596,6 +588,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      * @return NodeElement|null 
      */
     protected function findElementWithBusinessSelector($elementName, $scopeElement = null) {
+
         $selector = $this->getSelectorFromString($elementName);
 
         if (is_null($scopeElement)) {

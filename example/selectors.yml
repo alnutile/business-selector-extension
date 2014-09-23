@@ -26,3 +26,7 @@ Unhide: "#unhide"
 #Text Selectors
 test foo: "Foo"
 ben foo: "ben"
+cheeseCheckbox:	"option3"
+butterCheckbox:	"option2"
+milkCheckbox:	"option1"
+
