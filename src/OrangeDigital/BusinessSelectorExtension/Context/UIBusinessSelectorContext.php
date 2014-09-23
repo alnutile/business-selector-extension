@@ -197,11 +197,8 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      * @When /^I check the "([^"]*)" checkbox$/
      */
     public function iCheckTheCheckbox($elementName) {
-        $element = $this->findElementWithBusinessSelector($elementName);
-
-        if (!$element->isChecked()) {
-            $element->check();
-        }
+        $option = $this->getSelectorFromString($elementName);
+        $this->getSession()->getPage()->checkField($option);
     }
 
     /**
@@ -596,6 +593,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      * @return NodeElement|null 
      */
     protected function findElementWithBusinessSelector($elementName, $scopeElement = null) {
+
         $selector = $this->getSelectorFromString($elementName);
 
         if (is_null($scopeElement)) {
@@ -606,7 +604,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
         $result = $scopeElement->find('css', $selector);
 
         if (is_null($result)) {
-            throw new ElementNotFoundException("Element $elementName using selector $selector not found");
+            throw new ElementNotFoundException("FOO Element $elementName using selector $selector not found");
         }
 
         return $result;
