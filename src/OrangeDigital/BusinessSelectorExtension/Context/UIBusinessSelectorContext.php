@@ -202,14 +202,21 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
     }
 
     /**
+     * @Then /^the "([^"]*)" should be checked$/
+     */
+    public function theShouldBeChecked($elementName) {
+        $element = $this->getSelectorFromString($elementName);
+        if (!$this->getSession()->getPage()->hasCheckedField($element)) {
+            throw new \RuntimeException("$elementName is not checked");
+        }
+    }
+
+    /**
      * @When /^I uncheck the "([^"]*)" checkbox$/
      */
     public function iUnCheckTheCheckbox($elementName) {
-        $element = $this->findElementWithBusinessSelector($elementName);
-
-        if ($element->isChecked()) {
-            $element->uncheck();
-        }
+        $option = $this->getSelectorFromString($elementName);
+        $this->getSession()->getPage()->uncheckField($option);
     }
 
     /**
@@ -252,24 +259,12 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
     }
 
     /**
-     * @Then /^the "([^"]*)" should be checked$/
-     */
-    public function theShouldBeChecked($elementName) {
-        $element = $this->findElementWithBusinessSelector($elementName);
-
-        if (!$element->isChecked()) {
-            throw new \RuntimeException("$elementName is not checked");
-        }
-    }
-
-    /**
      * @Then /^the "([^"]*)" should not be checked$/
      */
     public function theShouldNotBeChecked($elementName) {
-        $element = $this->findElementWithBusinessSelector($elementName);
-
-        if ($element->isChecked()) {
-            throw new \RuntimeException("$elementName is checked");
+        $element = $this->getSelectorFromString($elementName);
+        if ($this->getSession()->getPage()->hasCheckedField($element)) {
+            throw new \RuntimeException("$elementName is checked and should not be");
         }
     }
 
@@ -604,7 +599,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
         $result = $scopeElement->find('css', $selector);
 
         if (is_null($result)) {
-            throw new ElementNotFoundException("FOO Element $elementName using selector $selector not found");
+            throw new ElementNotFoundException("Element $elementName using selector $selector not found");
         }
 
         return $result;

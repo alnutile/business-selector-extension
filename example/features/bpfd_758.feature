@@ -10,5 +10,5 @@ Feature: Test the token-compatible steps to investigate any issues
     And the "option1" checkbox should not be checked
     When I check the "cheeseCheckbox" checkbox
     Then the "cheeseCheckbox" should be checked
-    And the "butterCheckbox" should be checked
-    And the "milkCheckbox" should not be checked
+    And the "butterCheckbox" should not be checked
+    When I uncheck the "cheeseCheckbox" checkbox
