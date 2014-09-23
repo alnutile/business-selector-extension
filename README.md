@@ -1,10 +1,23 @@
 # Business Selectors For Behat
 
+[![Build Status](https://travis-ci.org/alnutile/business-selector-extension.png?branch=develop)](https://travis-ci.org/alnutile/business-selector-extension)
+
 ## Introduction 
+
+--
+
+The original project can be seen here
+https://github.com/orangedigital/business-selector-extension
+
+And many notes still apply below. I needed to simplify it a bit for the project I am using it on though it still is extendable to to other projects.
+
+Basically I do not want errors thrown if a token is not found since it can default back to the string the user used and then let Behat error out as needed
+
+--
 
 The Mink Extension for Behat is an excellent way to quickly get up and running 
 with web acceptance testing. It allows the user to specify HTML elements on the
-page using common attributes like 'title', 'alt' and 'value'. Some steos allow
+page using common attributes like 'title', 'alt' and 'value'. Some steps allow
 the use of CSS selectors inline in the Gherkin files. 
 
 While this approach is great it has a few draw backs: 
@@ -50,19 +63,13 @@ Widget: div#user_widget
 
 The best way to install the contexts is by using composer. 
 
-1) For instructions on installing Behat see: [behat.org][http://behat.org/]
+1) For instructions on installing Behat see: [behat.org](http://behat.org/)
 
 2) Add in the following to the composer.json of the project you'd like to test.
 
 ````javascript
 {   
     "minimum-stability": "dev",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/orangedigital/business-selector-extension"
-        }
-    ],
     "require": {
         "behat/behat": ">v2.4@stable",
         "orangedigital/business-selector-extension": "*"
@@ -86,6 +93,7 @@ default:
           urlFilePath: urls.yml
           selectorFilePath: selectors.yml
           assetPath: path
+          timeout: 30
           contexts:
             UIBusinessSelector: ~
         Behat\MinkExtension\Extension:
@@ -135,7 +143,7 @@ Run **../bin/behat**
 ##Steps Provided By Business Selectors
 
 Bellow are a list of steps provided by the business selector extension. Values in 
-<BRACKETS> denote arbitrary business friendly names which should match CSS 
+\<BRACKETS\> denote arbitrary business friendly names which should match CSS 
 selectors in the relevant config file (specified in behat.yml by 'urlFilePath' 
 and 'selectorFilePath'). See the provided example implementation for details.   
 
@@ -146,12 +154,21 @@ parameter "urlFilePath"**
 Given I go to the page "<PAGE NAME>" 
 ````
 
+````cucumber
+Given I attach "<FILE NAME> to <IMAGE INPUT>"
+````
+**Note: This requires the assetPath to be configured to a relative directory that contains your assets (e.g. assetPath: assets/). Filename must include the extension associated with the file (e.g. example.jpeg).**
+
 **All CSS Selectors below should be placed in the CSS selector file specified
 in behat.yml by the parameter "selectorFilePath"**
 
 
 ````cucumber
 When I follow the link "<LINK>"
+````
+
+````cucumber
+When I click the "<CLICKABLE ELEMENT>"
 ````
 
 ````cucumber
@@ -183,10 +200,12 @@ When I uncheck the "<CHECKBOX>" checkbox
 ````
 
 ````cucumber
-When I focus on the "<ID OF IFRAME>" iframe
+When I focus on the "<IFRAME (RELATES TO ID OR INDEX)>" iframe
 ````
 **Note: The step above is the only step where the selector MUST be an ID. 
-This is due to an underlying driver implementation detail**
+If the iframe does not have an ID, you can provide the index of the iframe, where
+0 relates to the first iframe, 1 the second etc. An example of this can be found
+in example/features/example.feature**
 
 ````cucumber
 When I refocus on the primary page
@@ -194,6 +213,10 @@ When I refocus on the primary page
 
 ````cucumber
 When I hover over "<PAGE ELEMENT>"
+````
+
+````cucumber
+When I wait for the "<PAGE ELEMENT>" component to [dis]appear
 ````
 
 ````cucumber

@@ -16,4 +16,12 @@ class FeatureContext extends BehatContext
         $this->useContext('mink', new MinkContext($parameters));
         $this->useContext('BusinessSelectors', new BusinessSelectorContext($parameters));
     }
+
+    /**
+     * @Given /^I wait for (\d+) seconds$/
+     */
+    public function iWaitForSeconds($arg1)
+    {
+        sleep($arg1);
+    }
 }

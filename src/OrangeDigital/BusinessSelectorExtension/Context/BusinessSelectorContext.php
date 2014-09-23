@@ -7,25 +7,26 @@ use Behat\Behat\Context\BehatContext;
 /**
  * Controlling context which loads other contexts specified in the behat.yml
  * file.
- * 
- * @author Ben Waine <ben.waine@orange.com>
- * @author Phill Hicks <phillip.hicks@orange.com>    
+ *
+ * @author James Bodkin
+ * @author Ben Waine
+ * @author Phill Hicks
  */
 class BusinessSelectorContext extends BehatContext {
 
     /**
      * Parameters from behat.yml.
-     * 
+     *
      * @var array
      */
     private $parameters;
 
     /**
      * Gets a parameter.
-     * 
+     *
      * @param string $extension
      * @param string $name
-     * 
+     *
      * @return string
      */
     public function getParameter($extension, $name) {
@@ -33,24 +34,24 @@ class BusinessSelectorContext extends BehatContext {
     }
 
     /**
-     * CHecks a parameter.
-     * 
+     * Checks a parameter.
+     *
      * @param string $extension
      * @param string $name
-     * 
+     *
      * @return bool
-     */    
+     */
     public function hasParameter($extension, $name) {
         return isset($this->parameters[$extension][$name]);
     }
 
     /**
      * Sets a parameter.
-     * 
+     *
      * @param string $extension
      * @param string $name
      * @param string $value
-     * 
+     *
      * @return string
      */
     public function setParameter($extension, $name, $value) {
@@ -59,13 +60,12 @@ class BusinessSelectorContext extends BehatContext {
 
     /**
      * Initialises the subcontexts and passes them the parameters.
-     *  
+     *
      * @param array $parameters 
-     * 
+     *
      * @return void
      */
     public function setParameters($parameters) {
-        
         $this->parameters = $parameters['contexts'];
 
         foreach ($this->parameters as $name => $values) {
@@ -75,4 +75,3 @@ class BusinessSelectorContext extends BehatContext {
     }
 
 }
-

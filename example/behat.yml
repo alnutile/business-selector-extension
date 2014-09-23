@@ -2,19 +2,20 @@ default:
     context:
         parameters:
             javascript_session: selenium
-            browser: firefox
-            show_cmd: open %s
+            browser: safari
     extensions:
         OrangeDigital\BusinessSelectorExtension\Extension:
           urlFilePath: urls.yml
           selectorFilePath: selectors.yml
           assetPath: assets/
+          timeout: 10
           contexts:
             UIBusinessSelector: ~
         Behat\MinkExtension\Extension:
-            base_url: "http://local.dev"
+            base_url: "http://127.0.0.1:8081/"
+            browser_name: safari
             default_session: goutte
             goutte: ~
             selenium: ~
-            selenium2: ~
-
+            selenium2:
+              wd_host: "http://localhost:4444/wd/hub"

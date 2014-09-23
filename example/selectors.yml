@@ -14,3 +14,19 @@ Widget: "div.main div.widget"
 Widget Area Two: "div.area_two"
 Widget Area Three: "div.area_three"
 Test Box: "testframe"
+IDIndex0: 0
+IDIndex1: 1
+Hidden Div: "#secret-container"
+Wait Test: "#wait_test"
+Add: "#add"
+Remove: "#remove"
+Hide: "#hide"
+Unhide: "#unhide"
+
+#Text Selectors
+test foo: "Foo"
+ben foo: "ben"
+cheeseCheckbox:	"option3"
+butterCheckbox:	"option2"
+milkCheckbox:	"option1"
+

@@ -58,6 +58,9 @@ class Extension implements ExtensionInterface {
                 scalarNode('assetPath')->
                     defaultNull()->
                 end()->
+                scalarNode('timeout')->
+                    defaultNull()->
+                end()->
                 arrayNode('contexts')->
                     children()->
                         scalarNode('UIBusinessSelector')->

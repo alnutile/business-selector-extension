@@ -1,0 +1,9 @@
+example/behat.me.yml
+.DS_Store
+*.swp
+nbproject/
+bin
+vendor
+composer.lock
+composer.phar
+.idea

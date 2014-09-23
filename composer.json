@@ -1,5 +1,5 @@
 {
-    "name": "orangedigital/business-selector-extension",
+    "name": "alnutile/business-selector-extension",
     "type": "library",
     "description": "CSS Selector Substitution For Behat",
     "keywords": ["Behat","BDD", "Gherkin"],
@@ -8,13 +8,11 @@
     "authors": [
         {
             "name": "Ben Waine",
-            "email": "ben.waine@orange.com",
             "homepage": "http://ben-waine.co.uk",
             "role": "Developer"
         },
         {
             "name": "Phill Hicks",
-            "email": "phillip.hicks@orange.com",
             "role": "Developer"
         }       
     ],
@@ -22,9 +20,13 @@
         "php": ">=5.3.0",
         "behat/behat": ">=2.4@stable",
         "behat/mink-extension": "*",
-        "behat/mink-goutte-driver": "*",
-        "behat/mink-selenium-driver": "*",
-        "behat/mink-selenium2-driver": "*"
+        "symfony/config": ">=2.0.0,<2.3.0",
+        "symfony/dependency-injection": ">=2.0.0,<2.3.0"
+    },
+    "require-dev": {
+        "behat/mink-goutte-driver": "1.0.8",
+        "behat/mink-selenium-driver": "1.0.5",
+        "behat/mink-selenium2-driver": "1.0.6"
     },
     "autoload": {
         "psr-0": {
