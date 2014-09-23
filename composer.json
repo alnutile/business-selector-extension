@@ -26,7 +26,8 @@
     "require-dev": {
         "behat/mink-goutte-driver": "1.0.8",
         "behat/mink-selenium-driver": "1.0.5",
-        "behat/mink-selenium2-driver": "1.0.6"
+        "behat/mink-selenium2-driver": "1.0.6",
+        "mockery/mockery": "0.9.*@dev"
     },
     "autoload": {
         "psr-0": {
