@@ -618,8 +618,8 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
         $session = $this->getSession()->getPage();
         $result = $session->hasContent($text);
 
-        if (is_null($result)) {
-            throw new ElementNotFoundException("Text $textToFind using text $text not found");
+       if (is_null($result) || $result === false) {
+            throw new ElementNotFoundException("Token $textToFind using text $text not found");
         }
 
         return $result;
