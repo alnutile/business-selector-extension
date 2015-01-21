@@ -392,6 +392,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
 
         $actualText = $element->getText();
 
+
         if (strpos($actualText, $text) === FALSE) {
             throw new \RuntimeException("'$text' not found in $elementName");
         }
