@@ -4,6 +4,7 @@ use Behat\Mink\Mink;
 use OrangeDigital\BusinessSelectorExtension\Context\UIBusinessSelectorContext;
 use Behat\Mink\Session;
 use Behat\Mink\Element\Element;
+use \Mockery as m;
 
 /**
  * Unit tests for the UIBusinessSelectorContext.
@@ -36,6 +37,7 @@ class UIBusinessSelectorContextTest extends \PHPUnit_Framework_TestCase {
 
         $this->mink = $this->getMock('\Behat\Mink\Mink', array(), array(), '', false, false);
 
+
         $this->context->setMink($this->mink);
     }
 
@@ -53,6 +55,8 @@ class UIBusinessSelectorContextTest extends \PHPUnit_Framework_TestCase {
                     ->expects($this->never())
                     ->method('getSession');
         }
+
+
     }
 
     protected function setFindExpectationWithReturnElement($selector, $element) {
@@ -293,125 +297,108 @@ class UIBusinessSelectorContextTest extends \PHPUnit_Framework_TestCase {
         $this->context->iAdditionallySelectFromTheSelector('value', 'does not exist');
     }
 
-    public function testICheckTheCheckboxShouldCorrectlySubstituteSelector() {
 
-        $this->setSessionExpectation(true);
+    /**
+     * Checkboxes
+     */
 
-        $cbox = $this->getMock('Behat\Mink\Element\NodeElement', array(), array(), '', false, false);
+    /**
+     * @test
+     */
+    public function the_step_ICheckTheCheckbox_should_correctly_substitute_selector() {
 
-        $cbox
-                ->expects($this->once())
-                ->method('isChecked')
-                ->will($this->returnValue(false));
+        $uibiz = $this->setUibiz();
 
-        $cbox
-                ->expects($this->once())
-                ->method('check')
-                ->will($this->returnValue(null));
-
-
-        $this->setFindExpectationWithReturnElement('input[name=terms]', $cbox);
-
-        $this->context->iCheckTheCheckbox('Terms Box');
+        $uibiz->iCheckTheCheckbox('Terms Box');
     }
 
-    public function testICheckTheCheckboxShouldNotCheckAnAlreadyCheckedBox() {
+    /**
+     * Setup the class for use to test using mockery
+     * @return UIBusinessSelectorContext
+     */
+    protected function setUiBiz($return_false_from_mink = false)
+    {
+        //Arrange
+        $return_value = ($return_false_from_mink == true) ? false : true;
+        $page       = m::mock('\Behat\Mink\Element\DocumentElement');
+        $page->shouldReceive('checkField')->andReturn($return_value);
+        $page->shouldReceive('uncheckField')->andReturn($return_value);
+        $page->shouldReceive('hasCheckedField')->andReturn($return_value);
 
-        $this->setSessionExpectation(true);
+        $session    = m::mock('\Behat\Mink\Session');
+        $session->shouldReceive('stop')->andReturn(true);
+        $session->shouldReceive('isStarted')->andReturn(true);
+        $session->shouldReceive('getPage')->andReturn($page);
 
-        $cbox = $this->getMock('Behat\Mink\Element\NodeElement', array(), array(), '', false, false);
+        $mink       = m::mock('\Behat\Mink\Mink');
+        $mink->shouldReceive('stopSessions')->andReturn(true);
 
-        $cbox
-                ->expects($this->once())
-                ->method('isChecked')
-                ->will($this->returnValue(true));
+        $mink->shouldReceive('getSession')->andReturn($session);
 
-        $cbox
-                ->expects($this->never())
-                ->method('check');
+        $uibiz = new UiBusinessSelectorContext(array(
+            "urlFilePath" => "tests/testfiles/urls.yml",
+            "selectorFilePath" => "tests/testfiles/selectors.yml",
+            "assetPath" => "tests/testfiles/assets/"
+        ));
 
-        $this->setFindExpectationWithReturnElement('input[name=terms]', $cbox);
-
-        $this->context->iCheckTheCheckbox('Terms Box');
+        //Act
+        $uibiz->setMink($mink);
+        return $uibiz;
     }
 
-    public function testICheckTheCheckboxShouldThrowExceptionIfElementNotFound() {
+    /**
+     * @test
+     *
+     * @expectedException \RuntimeException
+     */
+    public function the_step_ICheckTheCheckbox_should_not_correctly_substitute_selector() {
 
-        $this->setSessionExpectation(true);
+        $uibiz = $this->setUibiz();
 
-        $this->setFindExpectationWithNoElementFoundException('input[name=terms]');
+        $uibiz->iCheckTheCheckbox('foo_bar_not_here');
 
-        $this->context->iCheckTheCheckbox('Terms Box');
+        //Assert
+        // see comment for exception assertion
     }
 
-    public function testICheckTheCheckboxShouldThrowExceptionOnNonExistentSelector() {
-
-        $this->setSessionExpectation(false);
-
-        $this->setExpectedException('\RuntimeException');
-
-        $this->context->iCheckTheCheckbox('Terms Box that doesnt exist');
-    }
 
     public function testIUnCheckTheCheckboxShouldCorrectlySubstituteSelector() {
 
-        $this->setSessionExpectation(true);
+        $uibiz = $this->setUibiz();
 
-        $cbox = $this->getMock('Behat\Mink\Element\NodeElement', array(), array(), '', false, false);
-
-        $cbox
-                ->expects($this->once())
-                ->method('isChecked')
-                ->will($this->returnValue(true));
-
-        $cbox
-                ->expects($this->once())
-                ->method('uncheck')
-                ->will($this->returnValue(null));
-
-
-        $this->setFindExpectationWithReturnElement('input[name=terms]', $cbox);
-
-        $this->context->iUnCheckTheCheckbox('Terms Box');
+        $uibiz->iUnCheckTheCheckbox('Terms Box');
     }
 
-    public function testIUnCheckTheCheckboxShouldNotCheckAnAlreadyCheckedBox() {
+    public function testTheShouldBeCheckedShouldCorrectlySubstituteSelector() {
 
-        $this->setSessionExpectation(true);
+        $uibiz = $this->setUibiz();
 
-        $cbox = $this->getMock('Behat\Mink\Element\NodeElement', array(), array(), '', false, false);
-
-        $cbox
-                ->expects($this->once())
-                ->method('isChecked')
-                ->will($this->returnValue(false));
-
-        $cbox
-                ->expects($this->never())
-                ->method('uncheck');
-
-        $this->setFindExpectationWithReturnElement('input[name=terms]', $cbox);
-
-        $this->context->iUnCheckTheCheckbox('Terms Box');
+        $uibiz->theShouldBeChecked('Terms Box');
     }
 
-    public function testIUnCheckTheCheckboxShouldThrowExceptionIfElementNotFound() {
 
-        $this->setSessionExpectation(true);
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testTheShouldBeCheckedShouldCorrectlySubstituteSelectorException() {
 
-        $this->setFindExpectationWithNoElementFoundException('input[name=terms]');
+        $uibiz = $this->setUibiz($return_false_from_mink = true);
 
-        $this->context->iUnCheckTheCheckbox('Terms Box');
+        $uibiz->theShouldBeChecked('Terms Box');
     }
 
-    public function testIUnCheckTheCheckboxShouldThrowExceptionOnNonExistentSelector() {
 
-        $this->setSessionExpectation(false);
+    public function testTheShouldNotBeCheckedShouldCorrectlySubstituteSelector() {
 
-        $this->setExpectedException('\RuntimeException');
+        $uibiz = $this->setUibiz($return_false_from_mink = true);
 
-        $this->context->iUnCheckTheCheckbox('Terms Box that doesnt exist');
+        $uibiz->theShouldNotBeChecked('Terms Box');
     }
+
+    /**
+     * End Checkboxes
+     */
+
 
     public function testTheFormFieldShouldContainShouldCorrectlySubstituteSelector() {
 
@@ -422,7 +409,7 @@ class UIBusinessSelectorContextTest extends \PHPUnit_Framework_TestCase {
         $field
                 ->expects($this->once())
                 ->method('getValue')
-                ->will($this->returnValue("Test Value"));
+                ->will($this->returnValue("foo"));
 
         $this->setFindExpectationWithReturnElement('input[name=first_name]', $field);
 
@@ -499,106 +486,7 @@ class UIBusinessSelectorContextTest extends \PHPUnit_Framework_TestCase {
         $this->context->theFormFieldShouldNotContain('say what', 'value');
     }
 
-    public function testTheShouldBeCheckedShouldCorrectlySubstituteSelector() {
 
-        $this->setSessionExpectation(true);
-
-        $cbox = $this->getMock('Behat\Mink\Element\NodeElement', array(), array(), '', false, false);
-
-        $cbox
-                ->expects($this->once())
-                ->method('isChecked')
-                ->will($this->returnValue(true));
-
-        $this->setFindExpectationWithReturnElement('input[name=terms]', $cbox);
-
-        $this->context->theShouldBeChecked('Terms Box');
-    }
-
-    public function testTheShouldBeCheckedShouldThrowExceptionIfNotChecked() {
-        $this->setSessionExpectation(true);
-
-        $cbox = $this->getMock('Behat\Mink\Element\NodeElement', array(), array(), '', false, false);
-
-        $cbox
-                ->expects($this->once())
-                ->method('isChecked')
-                ->will($this->returnValue(false));
-
-        $this->setFindExpectationWithReturnElement('input[name=terms]', $cbox);
-
-        $this->setExpectedException('\RuntimeException');
-
-        $this->context->theShouldBeChecked('Terms Box');
-    }
-
-    public function testTheShouldBeCheckedShouldThrowExceptionIfElementNotFound() {
-
-        $this->setSessionExpectation(true);
-
-        $this->setFindExpectationWithNoElementFoundException('input[name=terms]');
-
-        $this->context->theShouldBeChecked('Terms Box');
-    }
-
-    public function testTheShouldBeCheckedShouldThrowExceptionOnNonExistentSelector() {
-
-        $this->setSessionExpectation(false);
-
-        $this->setExpectedException('\RuntimeException');
-
-        $this->context->theShouldBeChecked('say what');
-    }
-
-    public function testTheShouldNotBeCheckedShouldCorrectlySubstituteSelector() {
-
-        $this->setSessionExpectation(true);
-
-        $cbox = $this->getMock('Behat\Mink\Element\NodeElement', array(), array(), '', false, false);
-
-        $cbox
-                ->expects($this->once())
-                ->method('isChecked')
-                ->will($this->returnValue(false));
-
-        $this->setFindExpectationWithReturnElement('input[name=terms]', $cbox);
-
-        $this->context->theShouldNotBeChecked('Terms Box');
-    }
-
-    public function testTheShouldNotBeCheckedShouldThrowExceptionIfChecked() {
-
-        $this->setSessionExpectation(true);
-
-        $cbox = $this->getMock('Behat\Mink\Element\NodeElement', array(), array(), '', false, false);
-
-        $cbox
-                ->expects($this->once())
-                ->method('isChecked')
-                ->will($this->returnValue(true));
-
-        $this->setFindExpectationWithReturnElement('input[name=terms]', $cbox);
-        $this->setExpectedException('\RuntimeException');
-        $this->context->theShouldNotBeChecked('Terms Box');
-    }
-
-    public function testTheShouldNotBeCheckedShouldThrowExceptionIfElementNotFound() {
-
-        $this->setSessionExpectation(true);
-
-        $this->setFindExpectationWithNoElementFoundException('input[name=terms]');
-
-        $this->context->theShouldNotBeChecked('Terms Box');
-    }
-
-    public function testTheShouldNotBeCheckedShouldThrowExceptionOnNonExistentSelector() {
-
-        $this->setSessionExpectation(false);
-
-        $this->setExpectedException('\RuntimeException');
-
-        $this->context->theShouldNotBeChecked('say what');
-    }
 
     public function testTheShouldContainShouldCorrectlySubstituteSelector() {
 
@@ -1147,10 +1035,14 @@ class UIBusinessSelectorContextTest extends \PHPUnit_Framework_TestCase {
 
         $this->context->waitForComponent('Stuffed Dog');      
     }
-    
-    
-    
-            
+
+
+    protected function tearDown()
+    {
+        m::close();
+    }
+
+
 
 }
 
