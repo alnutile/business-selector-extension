@@ -453,7 +453,8 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
         $selectors = $this->getSelectorHash();
 
         if (!array_key_exists($string, $selectors) && $exception == true) {
-            throw new \RuntimeException('Selector: ' . $string . ' not found in selectors file');
+            //@NOTE return original string for backwards compatibility
+            return $string;
         } elseif(!array_key_exists($string, $selectors)) {
             return $string;
         }
