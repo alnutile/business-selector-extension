@@ -173,6 +173,8 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      */
     public function iFillInTheFieldWith($elementName, $value) {
         $element = $this->findElementWithBusinessSelector($elementName);
+        $value = $this->getSelectorFromString($value);
+
         $element->setValue($value);
     }
 
@@ -180,6 +182,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      * @When /^I select "([^"]*)" from the "([^"]*)" selector$/
      */
     public function iSelectFromTheSelector($value, $elementName) {
+        $value = $this->getSelectorFromString($value);
         $element = $this->findElementWithBusinessSelector($elementName);
 
         $element->selectOption($value);
@@ -189,6 +192,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      * @When /^I additionally select "([^"]*)" from the "([^"]*)" selector$/
      */
     public function iAdditionallySelectFromTheSelector($value, $elementName) {
+        $value = $this->getSelectorFromString($value);
         $element = $this->findElementWithBusinessSelector($elementName);
         $element->selectOption($value, true);
     }
@@ -224,7 +228,6 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      */
     public function theFormFieldShouldContain($elementName, $value) {
         $element = $this->findElementWithBusinessSelector($elementName);
-
         $value = $this->getSelectorFromString($value);
         $text = $element->getValue();
 
@@ -249,7 +252,6 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      */
     public function theFormFieldShouldNotContain($elementName, $value) {
         $element = $this->findElementWithBusinessSelector($elementName);
-
         $value   = $this->getSelectorFromString($value);
         $text    = $element->getValue();
 
@@ -386,6 +388,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      */
     public function theShouldContain($elementName, $text) {
         $element = $this->findElementWithBusinessSelector($elementName);
+        $text = $this->getSelectorFromString($text);
 
         $actualText = $element->getText();
 
@@ -398,6 +401,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      * @Then /^the "([^"]*)" should not contain "([^"]*)"$/
      */
     public function theShouldNotContain($elementName, $text) {
+        $text = $this->getSelectorFromString($text);
         $element = $this->findElementWithBusinessSelector($elementName);
 
         $actualText = $element->getText();
@@ -411,6 +415,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      * @Then /^"([^"]*)" should contain "([^"]*)"$/
      */
     public function shouldContain($elementNameOutter, $elementNameInner) {
+        $elementNameOutter = $this->getSelectorFromString($elementNameOutter);
         $scopeElement = $this->findElementWithBusinessSelector($elementNameOutter);
 
         $element = $this->findElementWithBusinessSelector($elementNameInner, $scopeElement);
@@ -420,6 +425,7 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
      * @Then /^"([^"]*)" should not contain "([^"]*)"$/
      */
     public function shouldNotContain($elementNameOutter, $elementNameInner) {
+        $elementNameInner = $this->getSelectorFromString($elementNameInner);
         $scopeElement = $this->findElementWithBusinessSelector($elementNameOutter);
 
         try {
