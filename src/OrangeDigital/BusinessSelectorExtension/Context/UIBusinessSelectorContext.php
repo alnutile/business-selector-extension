@@ -246,14 +246,18 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
             throw new \RuntimeException("'$arg1' not found on the page");
         }
     }
-    
+
     /**
      * @Then /^I should not see "([^"]*)" on the page$/
      */
     public function iShouldNotSeeOnThePage($arg1) {
-        $result = $this->findTextWithBusinessSelector($arg1);
-        if ($result) {
-            throw new \RuntimeException("'$arg1' found on the page");
+        try
+        {
+            $this->findTextWithBusinessSelector($arg1);
+            throw new \RuntimeException("'$arg1' found on the page and should not have been.");
+        } catch(\Exception $e)
+        {
+            //not found all is well.
         }
     }
 
