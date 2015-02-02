@@ -626,6 +626,20 @@ class UIBusinessSelectorContext extends BehatContext implements MinkAwareInterfa
 
         return $result;
     }
+    
+    /**
+     * @Given /^I follow the first link containing the text token "([^"]*)"$/
+     */
+    public function iFollowTheFirstLinkContainingTheTextToken($link) {
+        try {
+            $link = $this->getSelectorFromString($link);
+            $this->getMainContext()->getSession()->getPage()->clickLink($link);
+        }
+        catch(\Exception $e)
+        {
+            throw new ExpectationException(sprintf("Getting first Link with text %s %s", $link, $e->getMessage()), $this->getMainContext()->getSession());
+        }
+    }
 
     /**
      * Looks for text on the page. Great for Translation based text search.
